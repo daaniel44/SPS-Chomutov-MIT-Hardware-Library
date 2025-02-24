@@ -5,23 +5,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-
-/*
-HOW TO USE THIS LIBRARY
---Each hadrware has connector type in constructor, wich represents physical connection on the board.
-
---contructor automatically sets port addresses to internal variables
---_SFR_IO8(portAddress) is used instead of PORTx, DDRx, PINx
---portAddress stores address of PORTx, for DDRx use portAddress - 1 and for PINx use portAddress - 2
-
---each Hardware is initialized with connector type 
-    EXAMPLE: muxLed *myLed = new muxLed(CON_1); 
-    it has to be a pointer - (*myLed) 
-
-    each function is called with -> 
-    EXAMPLE: myLed->show(1);
-*/
-
 // PORT definitions
 typedef enum {
     PORT_A = 0x02,
