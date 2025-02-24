@@ -6,8 +6,21 @@
 
 - Knihovna bude upravována v průbehu, chyby a připomínky můžete dávat do Issues na githubu
 
+## INSTALACE 
+- __Doporuju používat Visual Studio Code__ projekt je nastavený pro použití platformio který umožňuje nahrávání do arduina přímo z VS code
+- Použití VS Code
+  - Nainstalovat Platformio Rozšíření
+  - Stáhnout celý repozitář
+  - __Červené řádky z terminálu zkopírovat do ChatGPT__
+  - V levo v okně platformio tlačítko Upload
+  - Platformio podporuje i sériový monitor
+- Použití Arduino IDE / NIVOLAB
+  - Stáhnout repozitář ale použít jen soubory ve složce src
+  - do ```main.ino``` potom stačí jen ```#include "custom_avr.h"```
+- upřímně nemám tušení zda to bude fungovat v NIVOLABU takže GL
+
 ## JAK POUŽÍVAT TUTO KNIHOVNU  
-- Každý hardware má v konstruktoru typ konektoru, který představuje fyzické připojení na desce.  
+- Každý hardware má v konstruktoru typ konektoru, který představuje fyzické připojení na vývojovém Shieldu  
 - Konstruktor automaticky nastaví adresy portů do interních proměnných.  
 
 ### POUŽÍVÁNÍ KONSTRUKTORŮ  
