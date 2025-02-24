@@ -11,8 +11,10 @@
 - Použití VS Code
   - Nainstalovat Platformio Rozšíření
   - Stáhnout celý repozitář
+  - V ```platformio.ini``` potom změnte port 
   - __Červené řádky z terminálu zkopírovat do ChatGPT__
-  - V levo v okně platformio tlačítko Upload
+  - V levo v okně platformio pod tabem megaADK tlačítko Upload
+  - tab simulIDE slouží pro použití se simulátorem
   - Platformio podporuje i sériový monitor
 - Použití Arduino IDE / NIVOLAB
   - Stáhnout repozitář ale použít jen soubory ve složce src
