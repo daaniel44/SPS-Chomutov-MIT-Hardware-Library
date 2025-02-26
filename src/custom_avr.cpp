@@ -4,13 +4,13 @@
 
 
 
-void digiWrite(portAddress_t port, uint8_t pin, uint8_t state) {
-  _SFR_IO8(port + 2) = (state) ? (_SFR_IO8(port) | (1 << pin)) : (_SFR_IO8(port) & ~(1 << pin));
+inline void digiWrite(volatile uint8_t *port, uint8_t pin, uint8_t state) {
+  *port = (*port & ~(1 << pin)) | ((state & 0x01) << pin);
 }
 
 
-uint8_t digiRead(portAddress_t port, uint8_t pin) {
-  return (_SFR_IO8(port) & (1 << pin)) != 0;
+inline uint8_t digiRead(volatile uint8_t *port, uint8_t pin) {
+  return *port & (1 << pin);
 }
 
 //PORT F
@@ -36,46 +36,35 @@ uint16_t analRead(uint8_t pin) {
 }
 
 
-portAddress_t pickPortA(connectorType_t connector) {
+uint8_t pickPort(connectorType_t connector, volatile uint8_t *port_a, volatile uint8_t *ddr_a, volatile uint8_t *pin_a, volatile uint8_t *port_b, volatile uint8_t *ddr_b, volatile uint8_t *pin_b) {
   switch (connector)
   {
   case CON_1:
-    return PORT_A;
+    port_a = &PORTA;
+    ddr_a = &DDRA;
+    pin_a = &PINA;
     break;
   case CON_2:
-    return PORT_A;
+    port_a = &PORTA;
+    ddr_a = &DDRA;
+    pin_a = &PINA;
     break;
   case CON_3:
-    return PORT_K;
+    port_a = &PORTK;
+    ddr_a = &DDRK;
+    pin_a = &PINK;
     break;
   case CON_4:
-    return PORT_A;
+    port_a = &PORTA;
+    ddr_a = &DDRA;
+    pin_a = &PINA;
     break;
+  
   default:
-    return PORT_A;
     break;
   }
-}
 
-portAddress_t pickPortB(connectorType_t connector) {
-  switch (connector)
-  {
-  case CON_1:
-    return PORT_C;
-    break;
-  case CON_2:
-    return PORT_C;
-    break;
-  case CON_3:
-    return PORT_F;
-    break;
-  case CON_4:
-    return PORT_B;
-    break;
-  default:
-    return PORT_A;
-    break;
-  }
+  return 0;
 }
 
 

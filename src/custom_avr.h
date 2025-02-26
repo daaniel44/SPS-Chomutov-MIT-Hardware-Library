@@ -5,22 +5,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-// PORT definitions
-typedef enum {
-    PORT_A = 0x02,
-    PORT_B = 0x05,
-    PORT_C = 0x08,
-    PORT_D = 0x0B,
-    PORT_E = 0x0E, 
-    PORT_F = 0x11,
-    PORT_G = 0x14,
-    PORT_H = 0x17,
-    PORT_J = 0x1A,
-    PORT_K = 0x1D,
-    PORT_L = 0x20
-} portAddress_t;
-
-
 enum connectorType_t {
     CON_1,
     CON_2,
@@ -59,8 +43,12 @@ class kbLedDisp {
         keytype_t kbLedDisp_readDigit();
 
     private:
-        volatile portAddress_t portAddress_a;
-        volatile portAddress_t portAddress_b;
+        volatile uint8_t *port_a = 0;
+        volatile uint8_t *ddr_a = 0;
+        volatile uint8_t *pin_a = 0;
+        volatile uint8_t *port_b = 0;
+        volatile uint8_t *ddr_b = 0;
+        volatile uint8_t *pin_b = 0;
 };
 
 class muxSegmentDisplay {
@@ -75,9 +63,12 @@ class muxSegmentDisplay {
         volatile float dispPublicNumber = 0;;
         volatile uint8_t dispPublicZeros = 0;
 
-        volatile portAddress_t portAddress_a;
-        volatile portAddress_t portAddress_b;
-
+        volatile uint8_t *port_a = 0;
+        volatile uint8_t *ddr_a = 0;
+        volatile uint8_t *pin_a = 0;
+        volatile uint8_t *port_b = 0;
+        volatile uint8_t *ddr_b = 0;
+        volatile uint8_t *pin_b = 0;
 };
 
 class serial {
@@ -93,13 +84,17 @@ class muxLed {
         muxLed(connectorType_t connector);
         void show(uint8_t led);
     private:
-        volatile portAddress_t portAddress_a;
-        volatile portAddress_t portAddress_b;
+        volatile uint8_t *port_a = 0;
+        volatile uint8_t *ddr_a = 0;
+        volatile uint8_t *pin_a = 0;
+        volatile uint8_t *port_b = 0;
+        volatile uint8_t *ddr_b = 0;
+        volatile uint8_t *pin_b = 0;
 };
 
 class I2C {
     public:
-        I2C(portAddress_t port, uint8_t sda_pin, uint8_t scl_pin);
+        I2C(volatile uint8_t *_port, volatile uint8_t *_ddr, volatile uint8_t *_pin, uint8_t sda_pin, uint8_t scl_pin);
         bool Start(uint8_t address);
         bool write(uint8_t byte);
         bool receiveFrom(uint8_t address);
@@ -107,23 +102,24 @@ class I2C {
         void stop();
         
     private:
-        volatile portAddress_t portAddress;
-        volatile uint8_t sda_pin;
-        volatile uint8_t scl_pin;
+        volatile uint8_t *port = 0;
+        volatile uint8_t *ddr = 0;
+        volatile uint8_t *pin = 0;
+        volatile uint8_t sda_pin = 0;
+        volatile uint8_t scl_pin = 0;
 
-        bool getACK();
-        void setSDA(bool state);
-        void setSCL(bool state);
-        void setDDR(bool sda, bool sck);
+        inline bool getACK();
+        inline void setSDA(bool state);
+        inline void setSCL(bool state);
+        inline void setDDR(bool sda, bool sck);
 };
 
-void digiWrite(uint8_t port, uint8_t pin, uint8_t state);
+inline void digiWrite(uint8_t port, uint8_t pin, uint8_t state);
 
-uint8_t digiRead(uint8_t port, uint8_t pin);
+inline uint8_t digiRead(uint8_t port, uint8_t pin);
 
 uint16_t analRead(uint8_t pin);
 
-portAddress_t pickPortA(connectorType_t connector);
-portAddress_t pickPortB(connectorType_t connector);
+uint8_t pickPort(connectorType_t connector, volatile uint8_t *port_a, volatile uint8_t *ddr_a, volatile uint8_t *pin_a, volatile uint8_t *port_b, volatile uint8_t *ddr_b, volatile uint8_t *pin_b);
 
 #endif

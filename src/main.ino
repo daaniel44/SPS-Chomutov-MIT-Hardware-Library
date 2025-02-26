@@ -14,7 +14,8 @@
 
 volatile uint16_t value = 0;
 
-I2C *i2c = new I2C(PORT_D, 0, 1);
+I2C *i2c = new I2C(&PORTD, &DDRD, &PIND, 0, 1);
+
 
 int main (void)
 {
@@ -30,9 +31,11 @@ int main (void)
 
   // sei();
   //serial::serialInit(9600);
-  
+  DDRB = 0xFF;
   Serial.begin(9600);
 
+  //writeMemory();
+  _delay_ms(1000);
   read_memory();
 
 }
@@ -40,15 +43,27 @@ int main (void)
 void read_memory() {
   uint8_t adress = 0x50;
 
-  for(uint8_t i = 0; i < 80; i++) {
+  for(uint8_t i = 0; i < 100; i++) {
     i2c->Start(adress);
     i2c->write(0x00);
     i2c->write(i);
     i2c->receiveFrom(adress);
-    i2c->stop();
     uint8_t result = i2c->read();
-
+    i2c->stop();
     Serial.print((char)result);
     PORTB = result;
+  }
+}
+
+void writeMemory() {
+  char data[] = "Nazdarek";
+  uint8_t adress = 0x50;
+  for (uint8_t i = 0; i < strlen(data); i++) {
+    i2c->Start(adress);
+    i2c->write(0x00);
+    i2c->write(i);
+    i2c->write(data[i]);
+    Serial.print(data[i]);
+    i2c->stop();
   }
 }

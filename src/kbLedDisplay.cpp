@@ -6,26 +6,25 @@ volatile uint8_t nums[] = {0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80,
 
 kbLedDisp::kbLedDisp(connectorType_t connector)
 {
-  this->portAddress_a = pickPortA(connector);
-  this->portAddress_b = pickPortB(connector);
+  pickPort(connector, port_a, ddr_a, pin_a, port_b, ddr_b, pin_b);
 }
 
 void kbLedDisp::kbLedDisp_Show(uint32_t num)
 {
-  _SFR_MEM8(portAddress_a - 1) = 0xFF;
-  _SFR_MEM8(portAddress_b) |= (1 << 4); // zapnuti displeje
+  *ddr_a = 0xFF;
+  *port_b |= (1 << 4); // zapnuti displeje
 
   uint8_t pos = 0;
 
   while (1)
   {
     uint8_t showNum = num % 10;
-    _SFR_MEM8(portAddress_b) |= 0x0C;
-    _SFR_MEM8(portAddress_b) &= ~(pos << 2);
+    *port_b |= 0x0C;
+    *port_b &= ~(pos << 2);
 
-    _SFR_MEM8(portAddress_a) = nums[showNum];
+    *port_a = nums[showNum];
     _delay_ms(1);
-    _SFR_MEM8(portAddress_a) = 0xFF;
+    *port_a = 0xFF;
 
     pos++;
     num /= 10;
@@ -34,8 +33,8 @@ void kbLedDisp::kbLedDisp_Show(uint32_t num)
   }
 
   _delay_ms(1);
-  _SFR_MEM8(portAddress_a) = 0xFF;
-  _SFR_MEM8(portAddress_b) &= ~(1 << 4);
+  *port_a = 0xFF;
+  *port_b &= ~(1 << 4);
 }
 
 uint8_t kbLedDisp::kbLedDisp_KeytoNumber(keytype_t key)
@@ -47,20 +46,20 @@ uint8_t kbLedDisp::kbLedDisp_KeytoNumber(keytype_t key)
 
 uint8_t kbLedDisp::kbLedDispl_scan()
 {
-  _SFR_MEM8(portAddress_a - 1) = 0x0F;
+  *ddr_a = 0x0F;
   uint8_t row = 0;
   uint8_t col = 0;
   for (col = 0; col < 4; col++)
   {
-    _SFR_MEM8(portAddress_a) &= ~(0x0F);
-    _SFR_MEM8(portAddress_a) |= (~(1 << col) & 0x0F);
+    *port_a &= ~(0x0F);
+    *port_a |= (~(1 << col) & 0x0F);
     _delay_us(5);
     for (row = 4; row < 8; row++)
     {
-      if ((_SFR_MEM8(portAddress_a - 2) & 0xF0) == (~(1 << row) & 0xF0))
+      if ((*pin_a & 0xF0) == (~(1 << row) & 0xF0))
       {
-        _SFR_MEM8(portAddress_a - 1) = 0xFF;
-        _SFR_MEM8(portAddress_a) = 0xFF;
+        *ddr_a = 0xFF;
+        *port_a = 0xFF;
         return (((row - 4) * 4) + col + 1);
       }
     }

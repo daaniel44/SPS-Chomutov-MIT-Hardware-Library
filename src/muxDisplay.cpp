@@ -8,8 +8,7 @@ volatile uint8_t realPos[] = {3, 2, 1, 0, 4, 5, 6, 7};
 
 muxSegmentDisplay::muxSegmentDisplay(connectorType_t connector)
 {
-  this->portAddress_a = pickPortA(connector);
-  this->portAddress_b = pickPortB(connector);
+  pickPort(connector, port_a, ddr_a, pin_a, port_b, ddr_b, pin_b);
 }
 
 void muxSegmentDisplay::Set(uint8_t pos, float number, uint8_t zeros)
@@ -21,8 +20,8 @@ void muxSegmentDisplay::Set(uint8_t pos, float number, uint8_t zeros)
 
 void muxSegmentDisplay::Run()
 {
-  _SFR_MEM8(portAddress_b - 1) = 0xFF;
-  _SFR_MEM8(portAddress_a - 1) = 0xFF;
+  *ddr_b = 0xFF;
+  *ddr_a = 0xFF;
   int64_t intCopyNumber = 0;
   float floatCopyNumber = dispPublicNumber;
   uint8_t decimals = 0;
@@ -46,8 +45,8 @@ void muxSegmentDisplay::Run()
   // Zobrazit desetinnou tečku na správné pozici
   if (decimals > 0)
   {
-    _SFR_MEM8(portAddress_b) = numbers[10];
-    _SFR_MEM8(portAddress_a) = realPos[8 - dispPublicPos - 1 - decimals];
+    *port_b = numbers[10];
+    *port_a = realPos[8 - dispPublicPos - 1 - decimals];
   }
 
   for (uint8_t i = 0; i < 8; i++)
@@ -57,19 +56,19 @@ void muxSegmentDisplay::Run()
     // Zjistit zda zobrazit nulu místo prázdného místa
     if (intCopyNumber != 0 || dispPublicZeros > i)
     {
-      _SFR_MEM8(portAddress_b) = numbers[num];
-      _SFR_MEM8(portAddress_a) = realPos[8 - i - dispPublicPos - 1];
+      *port_b = numbers[num];
+      *port_a = realPos[8 - i - dispPublicPos - 1];
     }
     // Zobrazit znaménko mínus pokud je číslo záporné
     else if (negative)
     {
-      _SFR_MEM8(portAddress_b) = numbers[11];
-      _SFR_MEM8(portAddress_a) = realPos[8 - dispPublicPos - 1 - i];
+      *port_b = numbers[11];
+      *port_a = realPos[8 - dispPublicPos - 1 - i];
       negative = false;
     }
     intCopyNumber /= 10;
   }
   // Reset čísel
-  _SFR_MEM8(portAddress_a) = 0;
-  _SFR_MEM8(portAddress_b) = 0;
+  *port_a = 0;
+  *port_a = 0;
 }
