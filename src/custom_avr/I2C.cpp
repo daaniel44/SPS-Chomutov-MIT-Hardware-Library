@@ -1,7 +1,6 @@
 #include "custom_avr.h"
-#include <Arduino.h>
 
-#define I2C_DELAY 2500
+#define I2C_DELAY 1000
 
 I2C::I2C(volatile uint8_t *_port, volatile uint8_t *_ddr, volatile uint8_t *_pin, uint8_t sda_pin, uint8_t scl_pin) {
     this->port = _port;
@@ -77,7 +76,9 @@ bool I2C::receiveFrom(uint8_t address) {
     return (write(address));
 }
 
-uint8_t I2C::read() {
+
+// Reads byte and send ACK to get next byte
+uint8_t I2C::read(bool readNext) {
     uint8_t result = 0;
     setDDR(false, true);
     _delay_us(I2C_DELAY);
@@ -90,6 +91,9 @@ uint8_t I2C::read() {
         setSCL(false);
         _delay_us(I2C_DELAY);
     }
+    setDDR(true, true);
+    if (readNext) setSDA(false);
+    else setSDA(true);
     _delay_us(I2C_DELAY);
     setSCL(true);
     _delay_us(I2C_DELAY);

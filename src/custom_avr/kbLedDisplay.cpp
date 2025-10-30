@@ -6,7 +6,18 @@ volatile uint8_t nums[] = {0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80,
 
 kbLedDisp::kbLedDisp(connectorType_t connector)
 {
-  pickPort(connector, port_a, ddr_a, pin_a, port_b, ddr_b, pin_b);
+  pickPort(connector, &port_a, &ddr_a, &pin_a, &port_b, &ddr_b, &pin_b);
+
+  // port_a = &PORTK;
+  // ddr_a = &DDRK;
+  // pin_a = &PINK;
+  // port_b = &PORTF;
+  // ddr_b = &DDRF;
+  // pin_b = &PINF;
+
+  *ddr_a = 0x0F;
+  *port_a = 0xF0;
+  *ddr_b = 0xFF;
 }
 
 void kbLedDisp::kbLedDisp_Show(uint32_t num)
@@ -72,7 +83,7 @@ uint32_t kbLedDisp::kbLedDisp_readNumber()
   uint8_t kb = 0;
   uint8_t pKb = 0;
   uint32_t finalNum = 0;
-  ;
+  
   while (1)
   {
     kb = kbLedDispl_scan();

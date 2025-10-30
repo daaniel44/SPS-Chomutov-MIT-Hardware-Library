@@ -2,7 +2,7 @@
 
 muxLed::muxLed(connectorType_t connector)
 {
-  pickPort(connector, port_a, ddr_a, pin_a, port_b, ddr_b, pin_b);
+  //pickPort(connector, port_a, ddr_a, pin_a, port_b, ddr_b, pin_b);
 }
 
 // PORTC and PORTA

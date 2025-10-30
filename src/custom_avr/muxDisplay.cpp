@@ -8,7 +8,7 @@ volatile uint8_t realPos[] = {3, 2, 1, 0, 4, 5, 6, 7};
 
 muxSegmentDisplay::muxSegmentDisplay(connectorType_t connector)
 {
-  pickPort(connector, port_a, ddr_a, pin_a, port_b, ddr_b, pin_b);
+  //pickPort(connector, port_a, ddr_a, pin_a, port_b, ddr_b, pin_b);
 }
 
 void muxSegmentDisplay::Set(uint8_t pos, float number, uint8_t zeros)

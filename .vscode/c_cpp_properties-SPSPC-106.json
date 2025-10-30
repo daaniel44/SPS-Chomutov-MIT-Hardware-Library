@@ -1,0 +1,58 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "C:/Users/janovsky.daniel26/OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace/PRX/Main/include",
+                "C:/Users/janovsky.daniel26/OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace/PRX/Main/src",
+                "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/cores/arduino",
+                "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/variants/mega",
+                "C:/Users/janovsky.daniel26/OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace/PRX/Main/.pio/libdeps/megaADK/avr-debugger/avr8-stub",
+                "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "C:/Users/janovsky.daniel26/OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace/PRX/Main/include",
+                    "C:/Users/janovsky.daniel26/OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace/PRX/Main/src",
+                    "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/cores/arduino",
+                    "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/variants/mega",
+                    "C:/Users/janovsky.daniel26/OneDrive - Střední průmyslová škola a Vyšší odborná škola, Chomutov, Školní 50, příspěvková organizace/PRX/Main/.pio/libdeps/megaADK/avr-debugger/avr8-stub",
+                    "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                    "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                    "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                    "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                    "C:/Users/janovsky.daniel26/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=60118",
+                "ARDUINO_AVR_ADK",
+                "F_CPU=16000000L",
+                "ARDUINO_ARCH_AVR",
+                "ARDUINO=10808",
+                "__AVR_ATmega2560__",
+                ""
+            ],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++11",
+            "compilerPath": "C:/Users/janovsky.daniel26/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe",
+            "compilerArgs": [
+                "-mmcu=atmega2560",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}

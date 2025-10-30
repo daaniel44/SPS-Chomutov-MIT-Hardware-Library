@@ -36,34 +36,40 @@ uint16_t analRead(uint8_t pin) {
 }
 
 
-uint8_t pickPort(connectorType_t connector, volatile uint8_t *port_a, volatile uint8_t *ddr_a, volatile uint8_t *pin_a, volatile uint8_t *port_b, volatile uint8_t *ddr_b, volatile uint8_t *pin_b) {
+uint8_t pickPort(connectorType_t connector, volatile uint8_t **port_a, volatile uint8_t **ddr_a, volatile uint8_t **pin_a, volatile uint8_t **port_b, volatile uint8_t **ddr_b, volatile uint8_t **pin_b) {
+  //port_a is always on the outside
   switch (connector)
   {
   case CON_1:
-    port_a = &PORTA;
-    ddr_a = &DDRA;
-    pin_a = &PINA;
+    *port_a = &PORTK;
+    *ddr_a = &DDRK;
+    *pin_a = &PINK;
+    *port_b = &PORTF;
+    *ddr_b = &DDRF;
+    *pin_b = &PINF;
     break;
   case CON_2:
-    port_a = &PORTA;
-    ddr_a = &DDRA;
-    pin_a = &PINA;
+    *port_a = &PORTB;
+    *ddr_a = &DDRB;
+    *pin_a = &PINB;
+    *port_b = &PORTL;
+    *ddr_b = &DDRL;
+    *pin_b = &PINL;
     break;
   case CON_3:
-    port_a = &PORTK;
-    ddr_a = &DDRK;
-    pin_a = &PINK;
+    *port_a = &PORTA;
+    *ddr_a = &DDRA;
+    *pin_a = &PINA;
+    *port_b = &PORTC;
+    *ddr_b = &DDRC;
+    *pin_b = &PINC;
     break;
   case CON_4:
-    port_a = &PORTA;
-    ddr_a = &DDRA;
-    pin_a = &PINA;
-    break;
-  
+    //here there are ports H,D,E,J,G so unusable
+    break;  
   default:
     break;
   }
-
   return 0;
 }
 
