@@ -36,11 +36,11 @@ enum keytype_t {
 class kbLedDisp {
     public:
         kbLedDisp(connectorType_t connector);
-        void kbLedDisp_Show(uint32_t num);
-        static uint8_t kbLedDisp_KeytoNumber(keytype_t key);
-        uint8_t kbLedDispl_scan();
-        uint32_t kbLedDisp_readNumber();
-        keytype_t kbLedDisp_readDigit();
+        void Show(uint32_t num);
+        static uint8_t KeytoNumber(keytype_t key);
+        uint8_t scan();
+        uint32_t readNumber();
+        keytype_t readKey();
 
     private:
         volatile uint8_t *port_a = 0;
@@ -99,7 +99,7 @@ class I2C {
         bool Start(uint8_t address);
         bool write(uint8_t byte);
         bool receiveFrom(uint8_t address);
-        uint8_t read() { return read(false); }
+        inline uint8_t read() { return read(false); }
         inline uint8_t readAndIncrement() { return read(true); };
         void stop();
         
@@ -125,9 +125,9 @@ class SPI {
         void send(uint8_t data);
         uint8_t receive();
     private:
-        uint8_t *port = 0;
-        uint8_t *pin = 0;
-        uint8_t *ddr = 0;
+        volatile uint8_t *port = 0;
+        volatile uint8_t *pin = 0;
+        volatile uint8_t *ddr = 0;
         uint8_t cs = 0;
         uint8_t di = 0;
         uint8_t clk = 0;
@@ -151,10 +151,12 @@ class I2CMemory {
 class MatrixDisplay {
     public:
         MatrixDisplay(connectorType_t connector);
+        void writeText(char *text);
         void appendChar(char c);
         void appendText(char *text);
         void clear();
         void setCursor(uint8_t pos);
+        void enableScrolling(bool enable);
         void run();
     private:
         volatile uint8_t *port_a = 0;
@@ -167,8 +169,9 @@ class MatrixDisplay {
         volatile uint8_t current_matrix[32] = {0};
         volatile uint8_t buffer[255] = {0};
         volatile uint8_t index = 0;
-        uint8_t cursor_pos = 0;
+        volatile uint8_t cursor_pos = 0;
 
+        volatile bool enable_scroll = false;
         volatile uint32_t timer = 0;
         volatile uint8_t scroll_offset = 0;
         volatile bool going_right = false;

@@ -4,23 +4,17 @@
 volatile uint8_t nums[] = {0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90, 0xFF};
 //                0       1      2     3   4     5      6     7    8     9    nic
 
+
 kbLedDisp::kbLedDisp(connectorType_t connector)
 {
   pickPort(connector, &port_a, &ddr_a, &pin_a, &port_b, &ddr_b, &pin_b);
-
-  // port_a = &PORTK;
-  // ddr_a = &DDRK;
-  // pin_a = &PINK;
-  // port_b = &PORTF;
-  // ddr_b = &DDRF;
-  // pin_b = &PINF;
 
   *ddr_a = 0x0F;
   *port_a = 0xF0;
   *ddr_b = 0xFF;
 }
 
-void kbLedDisp::kbLedDisp_Show(uint32_t num)
+void kbLedDisp::Show(uint32_t num)
 {
   *ddr_a = 0xFF;
   *port_b |= (1 << 4); // zapnuti displeje
@@ -48,14 +42,14 @@ void kbLedDisp::kbLedDisp_Show(uint32_t num)
   *port_b &= ~(1 << 4);
 }
 
-uint8_t kbLedDisp::kbLedDisp_KeytoNumber(keytype_t key)
+uint8_t kbLedDisp::KeytoNumber(keytype_t key)
 {
 
   uint8_t kb_chars[] = {0, 1, 2, 3, 10, 4, 5, 6, 11, 7, 8, 9, 12, 13, 0, 15, 16};
   return kb_chars[key];
 }
 
-uint8_t kbLedDisp::kbLedDispl_scan()
+uint8_t kbLedDisp::scan()
 {
   *ddr_a = 0x0F;
   uint8_t row = 0;
@@ -78,7 +72,8 @@ uint8_t kbLedDisp::kbLedDispl_scan()
   return (KEY_NOTHING);
 }
 
-uint32_t kbLedDisp::kbLedDisp_readNumber()
+//returns a max 4 digit number entered followed by ENTER key
+uint32_t kbLedDisp::readNumber()
 {
   uint8_t kb = 0;
   uint8_t pKb = 0;
@@ -86,36 +81,36 @@ uint32_t kbLedDisp::kbLedDisp_readNumber()
   
   while (1)
   {
-    kb = kbLedDispl_scan();
+    kb = scan();
     if (kb == KEY_ENTER)
       break;
     if (kb == KEY_ESC)
       finalNum = 0;
 
-    if (kb != KEY_NOTHING && kb != pKb && kbLedDisp_KeytoNumber((keytype_t)kb) < 10)
+    if (kb != KEY_NOTHING && kb != pKb && KeytoNumber((keytype_t)kb) < 10)
     {
       finalNum *= 10;
-      finalNum += (uint32_t)kbLedDisp_KeytoNumber((keytype_t)kb);
+      finalNum += (uint32_t)KeytoNumber((keytype_t)kb);
     }
     pKb = kb;
-    kbLedDisp_Show(finalNum);
+    Show(finalNum);
   }
 
-  while (kbLedDispl_scan() != KEY_NOTHING)
+  while (scan() != KEY_NOTHING)
   {
   }
   return (finalNum);
 }
 
-keytype_t kbLedDisp::kbLedDisp_readDigit()
+keytype_t kbLedDisp::readKey()
 {
   uint8_t value = 0;
   while (1)
   {
-    value = kbLedDispl_scan();
+    value = scan();
     if (value != 0)
       break;
   }
-  while (kbLedDispl_scan() != 0);
+  while (scan() != 0);
   return (keytype_t)value;
 }

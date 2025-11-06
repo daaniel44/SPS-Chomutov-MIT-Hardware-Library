@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <string.h>
 #include "custom_avr.h"
-#include "../font.h"
+#include "font.h"
 
 
 MatrixDisplay::MatrixDisplay(connectorType_t connector)
@@ -50,14 +50,24 @@ void MatrixDisplay::appendText(char *text) {
 	}
 }
 
+void MatrixDisplay::writeText(char *text) {
+    this->clear();
+    for(uint8_t i = 0; i < strlen(text); i++) {
+        if (text[i] < 32 || text[i] > 126) continue; // ignorovat neplatné znaky
+		appendChar(text[i]);
+    }
+}
+
 void MatrixDisplay::clear() {
     text_length = 0;
     cursor_pos = 0;
     scroll_offset = 0;
     going_right = false;
     for (uint8_t i = 0; i < 32; i++) {
-        buffer[i] = 0;
         current_matrix[i] = 0;
+    }
+    for(uint8_t i = 0; i < 255; i++) {
+        buffer[i] = 0;
     }
     *port_a = 0;
     *port_b = 0;
@@ -65,6 +75,10 @@ void MatrixDisplay::clear() {
 
 void MatrixDisplay::setCursor(uint8_t pos) {
     cursor_pos = pos;
+}
+
+void MatrixDisplay::enableScrolling(bool enable) {
+    this->enable_scroll = enable;
 }
 
 // Interrupt settings:
@@ -77,6 +91,22 @@ void MatrixDisplay::run() {
     *port_a = current_matrix[index];
     index++;
     if (index >= 32) index = 0;
+
+    if(!enable_scroll) {
+        if(text_length > 32) {
+            for(uint8_t i = 0; i < 32; i++) {
+                current_matrix[i] = buffer[cursor_pos - 32 + i];
+            }
+        }
+        else {
+            for(uint8_t i = 0; i < 32; i++) {
+                current_matrix[i] = buffer[i];
+            }
+        }
+        scroll_offset = 0;
+        timer = 0;
+        return;
+    }
 
     if(timer >= 10000) { // Adjust scrolling speed here
         // Shift current_matrix left by copying from buffer with offset
